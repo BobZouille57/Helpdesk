@@ -28,7 +28,7 @@ try {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 
     <!-- Lien vers ton fichier CSS personnalisé -->
-    <link rel="stylesheet" href="assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/header.css">
 
     <!-- Script JS de Bootstrap pour le bon fonctionnement du dropdown -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -39,9 +39,9 @@ try {
         <div class="avatar">
             <?php if (!empty($_SESSION['id_users'])) { ?>
                 <?php if ($avatar): ?>
-                    <img src="assets/upload/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
+                    <img src="/assets/upload/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
                 <?php else: ?>
-                    <img src="assets/upload/default-avatar.png" alt="Avatar par défaut" width="50" class="rounded-circle">
+                    <img src="/assets/upload/default-avatar.png" alt="Avatar par défaut" width="50" class="rounded-circle">
                 <?php endif; ?>
             <?php } ?>
         </div>

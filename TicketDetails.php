@@ -64,7 +64,7 @@ if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails du Ticket</title>
-    <link rel="stylesheet" href="assets/css/ticketDetails.css">
+    <link rel="stylesheet" href="/assets/css/ticketDetails.css">
 </head>
 <body>
     <main class="container">

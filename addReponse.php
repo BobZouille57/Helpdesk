@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Répondre au Ticket</title>
-    <link rel="stylesheet" href="assets/css/addReponse.css">
+    <link rel="stylesheet" href="/assets/css/addReponse.css">
 </head>
 <body>
     <main class="container">

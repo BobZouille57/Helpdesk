@@ -18,7 +18,7 @@ if (isset($_POST['register'])) {
 
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
-                $uploadDirectory = 'assets/upload/';
+                $uploadDirectory = '/assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
 
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
@@ -97,7 +97,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpDesk - Connexion</title>
-    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="/assets/css/login.css">
 </head>
 <body>
     <header>

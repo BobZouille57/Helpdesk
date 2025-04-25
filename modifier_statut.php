@@ -43,7 +43,7 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le Statut du Ticket</title>
-    <link rel="stylesheet" href="assets/css/modifier_statut.css">
+    <link rel="stylesheet" href="/assets/css/modifier_statut.css">
 </head>
 <body>
     <div class="container">
