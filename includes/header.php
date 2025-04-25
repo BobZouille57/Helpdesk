@@ -5,9 +5,10 @@ session_start();
 
 try {
     $stmt = $pdo->prepare("SELECT nom, prenom, avatar FROM users WHERE id_users = ?");
-    $stmt->execute([$_SESSION['id_users']]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    if (empty($_SESSION['id_users'])) {
+        $stmt->execute([$_SESSION['id_users']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     if ($user) {
         $user_name = $user['prenom'] . ' ' . $user['nom'];
         $avatar = $user['avatar'];
