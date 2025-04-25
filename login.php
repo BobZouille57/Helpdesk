@@ -1,10 +1,5 @@
 <?php
 require_once 'includes/bdd.php';
-session_start();
-if (isset($_SESSION['id_users'])) {
-    header("Location: index.php");
-    exit();
-}
 
 $message = '';
 
