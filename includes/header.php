@@ -37,16 +37,20 @@ try {
 <header>
     <div class="header-container">
         <div class="avatar">
-            <?php if ($avatar): ?>
-                <img src="assets/upload/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
-            <?php else: ?>
-                <img src="assets/upload/default-avatar.png" alt="Avatar par défaut" width="50" class="rounded-circle">
-            <?php endif; ?>
+            <?php if (!empty($_SESSION['id_users'])) { ?>
+                <?php if ($avatar): ?>
+                    <img src="assets/upload/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
+                <?php else: ?>
+                    <img src="assets/upload/default-avatar.png" alt="Avatar par défaut" width="50" class="rounded-circle">
+                <?php endif; ?>
+            <?php } ?>
         </div>
 
-        <div class="user-info">
-            <p>Bonjour, <?php echo htmlspecialchars($user_name); ?> !</p>
-        </div>
+        <?php if (!empty($_SESSION['id_users'])) { ?>
+            <div class="user-info">
+                <p>Bonjour, <?php echo htmlspecialchars($user_name); ?> !</p>
+            </div>
+        <?php } ?>
 
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
