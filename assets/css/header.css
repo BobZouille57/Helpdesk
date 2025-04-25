@@ -56,7 +56,8 @@ header a:hover {
 }
 
 .dropdown-menu {
-    background-color: #007bff;
+    background-color: #76b8ff;
+    border: none;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
