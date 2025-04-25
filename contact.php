@@ -24,8 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $mail->Subject = 'Nouveau message de contact : ' . $subject;
         $mail->Body    = 'Email de l\'utilisateur : ' . $user_email . "\n" .
-                         'Sujet : ' . $subject . "\n" .
-                         'Message :\n' . $message;
+                         'Message : ' . $message;
 
         if ($mail->send()) {
             $_SESSION['contact_message'] = "Votre message a été envoyé avec succès !";
