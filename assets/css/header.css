@@ -59,13 +59,6 @@ header a:hover {
     color: white !important;
 }
 
-.dropdown-menu {
-    background-color: #007bff;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .user-info {
     margin-left: 15px;
     display: flex;
@@ -95,6 +88,10 @@ li::marker {
     color: white;
     background-color: #007bff;
     transition: 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
 }
 
 @media (max-width: 768px) {
