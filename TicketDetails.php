@@ -2,10 +2,7 @@
 require_once 'includes/header.php';
 require_once 'includes/bdd.php';
 
-if (!isset($_SESSION['id_users'])) {
-    header("Location: login.php");
-    exit();
-}
+
 
 if (isset($_GET['id'])) {
     $ticket_id = $_GET['id'];

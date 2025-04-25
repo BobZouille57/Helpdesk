@@ -1,10 +1,7 @@
 <?php
 require_once 'bdd.php';
 
-if (!isset($_SESSION['id_users'])) {
-    header("Location: login.php");
-    exit();
-}
+
 
 try {
     $stmt = $pdo->prepare("SELECT nom, prenom, avatar FROM users WHERE id_users = ?");
