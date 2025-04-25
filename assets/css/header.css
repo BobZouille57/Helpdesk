@@ -94,6 +94,18 @@ li::marker {
     content: "";
 }
 
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    transition: 0.3s;
+}
+
 @media (max-width: 768px) {
     header {
         flex-direction: column;
