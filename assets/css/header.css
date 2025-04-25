@@ -98,7 +98,11 @@ li::marker {
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #58a9ff;
+}
+
+.dropdown-item {
+    width: auto!important;
 }
 
 @media (max-width: 768px) {
