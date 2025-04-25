@@ -1,6 +1,6 @@
 <?php
 require_once 'bdd.php';
-
+session_start();
 
 
 try {
