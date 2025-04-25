@@ -12,10 +12,6 @@ try {
     if ($user) {
         $user_name = $user['prenom'] . ' ' . $user['nom'];
         $avatar = $user['avatar'];
-    } else {
-        session_destroy();
-        header("Location: login.php");
-        exit();
     }
 } catch (PDOException $e) {
     die("❌ Erreur lors de la récupération des informations utilisateur : " . $e->getMessage());

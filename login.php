@@ -77,7 +77,7 @@ if (isset($_POST['login'])) {
                 $_SESSION['user_name'] = $user['nom'] . ' ' . $user['prenom'];
                 $_SESSION['droits'] = $user['droits'];
 
-                // header("Location: index.php");  // Redirection sans ouvrir un nouvel onglet
+                header("Location: index.php");  // Redirection sans ouvrir un nouvel onglet
                 exit();
             } else {
                 $message = "❌ Email ou mot de passe incorrect.";
