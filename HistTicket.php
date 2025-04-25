@@ -1,0 +1,57 @@
+<?php
+require_once 'header.php';
+require_once 'bdd.php';
+
+if (!isset($_SESSION['id_users'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut FROM tickets WHERE id_user = ?");
+$stmt->execute([$_SESSION['id_users']]);
+$tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Tickets</title>
+    <link rel="stylesheet" href="css/histTicket.css">
+</head>
+<body>
+    <main class="container">
+        <div class="ticket-list">
+            <h2>Historique de vos Tickets</h2>
+
+            <?php if (count($tickets) > 0): ?>
+                <table class="ticket-table">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Catégorie</th>
+                            <th>Date de création</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($tickets as $ticket): ?>
+                            <tr>
+                                <td><a href="TicketDetails.php?id=<?php echo $ticket['id_ticket']; ?>"><?php echo htmlspecialchars($ticket['titre']); ?></a></td>
+                                <td><?php echo htmlspecialchars($ticket['categorie']); ?></td>
+                                <td><?php echo date('d/m/Y H:i', strtotime($ticket['date_creation'])); ?></td>
+                                <td><?php echo htmlspecialchars($ticket['statut']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p>Aucun ticket trouvé.</p>
+            <?php endif; ?>
+        </div>
+    </main>
+</body>
+</html>
+
+<?php require_once 'footer.php'; ?>
