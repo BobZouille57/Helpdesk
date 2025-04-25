@@ -1,6 +1,6 @@
 <?php
-require_once 'header.php';
-require_once 'bdd.php';
+require_once 'includes/header.php';
+require_once 'includes/bdd.php';
 
 if (!isset($_POST['ticket_id']) || empty($_POST['ticket_id'])) {
     echo "Ticket ID non spécifié.";
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty(
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Répondre au Ticket</title>
-    <link rel="stylesheet" href="css/addReponse.css">
+    <link rel="stylesheet" href="assets/css/addReponse.css">
 </head>
 <body>
     <main class="container">
@@ -92,4 +92,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty(
 </body>
 </html>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>

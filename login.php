@@ -1,5 +1,5 @@
 <?php
-require_once 'bdd.php';
+require_once 'includes/bdd.php';
 
 if (isset($_SESSION['id_users'])) {
     header("Location: index.php");
@@ -23,7 +23,7 @@ if (isset($_POST['register'])) {
 
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
-                $uploadDirectory = 'upload/';
+                $uploadDirectory = 'assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
 
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
@@ -102,7 +102,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpDesk - Connexion</title>
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 <body>
     <header>

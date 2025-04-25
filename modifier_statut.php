@@ -1,6 +1,6 @@
 <?php
-require_once 'header.php';
-require_once 'bdd.php';
+require_once 'includes/header.php';
+require_once 'includes/bdd.php';
 
 if (!isset($_SESSION['id_users']) || $_SESSION['droits'] != 1) {
     header("Location: login.php");
@@ -43,7 +43,7 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le Statut du Ticket</title>
-    <link rel="stylesheet" href="css/modifier_statut.css">
+    <link rel="stylesheet" href="assets/css/modifier_statut.css">
 </head>
 <body>
     <div class="container">
@@ -68,4 +68,4 @@ if (isset($_GET['id'])) {
 </body>
 </html>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>

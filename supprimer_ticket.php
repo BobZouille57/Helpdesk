@@ -1,5 +1,5 @@
 <?php
-require_once 'bdd.php';
+require_once 'includes/bdd.php';
 
 if (!isset($_SESSION['id_users']) || $_SESSION['droits'] != 1) {
     header("Location: login.php");

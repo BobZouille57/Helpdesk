@@ -1,6 +1,6 @@
 <?php
-require_once 'header.php';
-require_once 'bdd.php';
+require_once 'includes/header.php';
+require_once 'includes/bdd.php';
 
 if (!isset($_SESSION['id_users'])) {
     header("Location: login.php");
@@ -28,7 +28,7 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historique des Tickets</title>
-    <link rel="stylesheet" href="css/histTicket.css">
+    <link rel="stylesheet" href="assets/css/histTicket.css">
 </head>
 <body>
     <main class="container">
@@ -73,4 +73,4 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </body>
 </html>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once 'includes/footer.php'; ?>

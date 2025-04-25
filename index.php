@@ -1,6 +1,6 @@
 <?php
-require_once 'header.php';
-require_once 'bdd.php'; 
+require_once 'includes/header.php';
+require_once 'includes/bdd.php'; 
 
 if (!isset($_SESSION['id_users'])) {
     header("Location: login.php");
@@ -14,7 +14,7 @@ if (!isset($_SESSION['id_users'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HelpDesk - Accueil</title>
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="assets/css/index.css">
 </head>
 <body>
     <div class="content-wrapper">
@@ -31,6 +31,6 @@ if (!isset($_SESSION['id_users'])) {
         </main>
     </div>
 
-    <?php require_once 'footer.php'; ?>
+    <?php require_once 'includes/footer.php'; ?>
 </body>
 </html>
