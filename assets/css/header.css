@@ -55,6 +55,12 @@ header a:hover {
     color: #ffdd57;
 }
 
+.dropdown-menu {
+    background-color: #007bff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .nav-link {
     color: white !important;
 }
