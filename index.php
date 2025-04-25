@@ -1,8 +1,6 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/bdd.php'; 
-session_start();
-
 ?>
 
 <!DOCTYPE html>
