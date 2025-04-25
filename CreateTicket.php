@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helpdesk - Création de ticket</title>
-    <link rel="stylesheet" href="/assets/css/createTicket.css">
+    <link rel="stylesheet" href="/assets/css/CreateTicket.css">
 </head>
 <body>
     <main class="container">
