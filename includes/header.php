@@ -25,13 +25,13 @@ try {
     <title>HelpDesk</title>
 
     <!-- Lien vers le fichier CSS de Bootstrap -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 
     <!-- Lien vers ton fichier CSS personnalisé -->
-    <link rel="stylesheet" href="/assets/css/header.css">
+    <link rel="stylesheet" href="/assets/css/header">
 
     <!-- Script JS de Bootstrap pour le bon fonctionnement du dropdown -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <header>
