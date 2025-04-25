@@ -110,6 +110,80 @@ textarea:focus {
     margin-top: 5px;
 }
 
+/* Style pour le message de ticket résolu */
+.ticket-resolu-message {
+    background-color: #28a745; /* Vert clair */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.ticket-resolu-message i {
+    margin-right: 10px;
+    font-size: 24px; /* Icône plus grande */
+}
+
+/* Style pour le bouton de suppression */
+.btn-danger {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-danger:hover {
+    background-color: darkred;
+}
+
+.badge-admin {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.badge-user {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.btn-trash {
+    background-color: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-trash:hover {
+    color: #c82333;
+}
+
+.reponse-item form {
+    display: inline;
+    float: right;
+    margin-top: -20px; /* Ajuste la position du bouton pour l'aligner avec la date */
+}
+
+.reponse-item small {
+    margin-right: 10px;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .ticket-details {

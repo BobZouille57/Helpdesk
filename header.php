@@ -49,7 +49,7 @@ try {
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="ticketMenu">
                 <li><a class="dropdown-item" href="index.php">Accueil</a></li>
                 <li><a class="dropdown-item" href="CreateTicket.php">Créer un ticket</a></li>
-                <li><a class="dropdown-item" href="HistTicket.php">Mes Tickets</a></li>
+                <li><a class="dropdown-item" href="HistTicket.php">Tickets</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item text-danger" href="logout.php">Se déconnecter</a></li>
             </ul>

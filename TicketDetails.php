@@ -10,8 +10,14 @@ if (!isset($_SESSION['id_users'])) {
 if (isset($_GET['id'])) {
     $ticket_id = $_GET['id'];
 
-    $stmt = $pdo->prepare("SELECT * FROM tickets WHERE id_ticket = ? AND id_user = ?");
-    $stmt->execute([$ticket_id, $_SESSION['id_users']]);
+    if ($_SESSION['droits'] == 1) {
+        $stmt = $pdo->prepare("SELECT * FROM tickets WHERE id_ticket = ?");
+        $stmt->execute([$ticket_id]);
+    } else {
+        $stmt = $pdo->prepare("SELECT * FROM tickets WHERE id_ticket = ? AND id_user = ?");
+        $stmt->execute([$ticket_id, $_SESSION['id_users']]);
+    }
+
     $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$ticket) {
@@ -20,9 +26,39 @@ if (isset($_GET['id'])) {
     }
 }
 
-$stmt = $pdo->prepare("SELECT * FROM reponses WHERE id_ticket = ?");
+// Ajout d'une réponse
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty($_POST['message'])) {
+    $message = trim($_POST['message']);
+    if (!empty($message)) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO reponses (id_ticket, id_user, reponse, date_reponse) VALUES (?, ?, ?, NOW())");
+            $stmt->execute([$ticket_id, $_SESSION['id_users'], $message]);
+            $successMessage = "Réponse ajoutée avec succès !";
+        } catch (PDOException $e) {
+            $errorMessage = "Erreur lors de l'ajout de la réponse : " . $e->getMessage();
+        }
+    } else {
+        $errorMessage = "La réponse ne peut pas être vide.";
+    }
+}
+
+// Récupération des réponses
+$stmt = $pdo->prepare("SELECT reponses.*, users.prenom, users.nom, users.droits FROM reponses 
+                       JOIN users ON reponses.id_user = users.id_users 
+                       WHERE reponses.id_ticket = ? 
+                       ORDER BY date_reponse ASC");
 $stmt->execute([$ticket_id]);
 $reponses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Suppression d'une réponse (si administrateur)
+if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
+    if ($_SESSION['droits'] == 1) {
+        $stmt = $pdo->prepare("DELETE FROM reponses WHERE id_reponse = ?");
+        $stmt->execute([$_POST['id_reponse']]);
+        header("Location: TicketDetails.php?id=" . $ticket_id);
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,25 +78,64 @@ $reponses = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p><strong>Statut:</strong> <?php echo htmlspecialchars($ticket['statut']); ?></p>
             <p><strong>Description:</strong> <?php echo nl2br(htmlspecialchars($ticket['description'])); ?></p>
 
-            <h3>Conversation</h3>
-            <?php if (count($reponses) > 0): ?>
-                <ul class="reponses-list">
-                    <?php foreach ($reponses as $reponse): ?>
-                        <li>
-                            <p><strong><?php echo $reponse['id_user']; ?>:</strong> <?php echo nl2br(htmlspecialchars($reponse['reponse'])); ?></p>
-                            <p><small><?php echo date('d/m/Y H:i', strtotime($reponse['date_reponse'])); ?></small></p>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+            <!-- Formulaire pour ajouter une réponse -->
+            <?php if ($ticket['statut'] != 'Résolu'): ?>
+                <form action="TicketDetails.php?id=<?php echo $ticket_id; ?>" method="POST">
+                    <textarea name="message" rows="5" class="form-control" placeholder="Votre réponse..." required></textarea>
+                    <button type="submit" class="btn">Ajouter une réponse</button>
+                </form>
             <?php else: ?>
-                <p>Aucune réponse de l'administrateur pour ce ticket.</p>
+                <div class="ticket-resolu-message">
+                    <i class="fas fa-check-circle"></i> <strong>Le ticket est résolu.</strong>
+                </div>
             <?php endif; ?>
 
-            <form action="addReponse.php" method="POST">
-                <textarea name="message" rows="5" class="form-control" placeholder="Votre réponse..." required></textarea>
-                <input type="hidden" name="ticket_id" value="<?php echo $ticket_id; ?>">
-                <button type="submit" class="btn">Ajouter une réponse</button>
-            </form>
+            <!-- Message de succès ou d'erreur -->
+            <?php if (isset($successMessage)): ?>
+                <div class="alert alert-success"><?php echo htmlspecialchars($successMessage); ?></div>
+            <?php elseif (isset($errorMessage)): ?>
+                <div class="alert alert-danger"><?php echo htmlspecialchars($errorMessage); ?></div>
+            <?php endif; ?>
+
+            <h3>Historique des réponses</h3>
+            <div class="reponses">
+                <?php if ($reponses): ?>
+                    <?php foreach ($reponses as $reponse): ?>
+                        <div class="reponse-item">
+                            <b>
+                                <?php echo htmlspecialchars($reponse['prenom']) . " " . htmlspecialchars($reponse['nom']); ?>
+                                <?php if ($reponse['droits'] == 1): ?>
+                                    <span class="badge badge-admin">Admin</span>
+                                <?php else: ?>
+                                    <span class="badge badge-user">User</span>
+                                <?php endif; ?>
+                            </b>
+                            <small> le <?php echo date('d/m/Y H:i', strtotime($reponse['date_reponse'])); ?></small>
+
+                            <?php if ($_SESSION['droits'] == 1): ?>
+                                <form method="POST" style="display:inline; float: right;">
+                                    <input type="hidden" name="id_reponse" value="<?php echo $reponse['id_reponse']; ?>">
+                                    <input type="hidden" name="supprimer_reponse" value="1">
+                                    <button type="submit" class="btn btn-trash" title="Supprimer la réponse">
+                                        🗑️
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+
+                            <p><?php echo nl2br(htmlspecialchars($reponse['reponse'])); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Aucune réponse pour ce ticket.</p>
+                <?php endif; ?>
+            </div>
+
+            <?php if ($ticket['statut'] == 'Résolu' && $_SESSION['droits'] == 2): ?>
+                <form method="POST">
+                    <input type="hidden" name="fermer_ticket" value="1">
+                    <button type="submit" class="btn btn-danger">Fermer définitivement le ticket</button>
+                </form>
+            <?php endif; ?>
         </div>
     </main>
 </body>

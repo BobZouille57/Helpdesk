@@ -7,8 +7,18 @@ if (!isset($_SESSION['id_users'])) {
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut FROM tickets WHERE id_user = ?");
-$stmt->execute([$_SESSION['id_users']]);
+$stmt = null;
+
+// Si l'utilisateur est administrateur (droits = 1), on récupère tous les tickets
+if ($_SESSION['droits'] == 1) {
+    $stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut, id_user FROM tickets");
+    $stmt->execute();
+} else {
+    // Si c'est un utilisateur normal, on récupère uniquement ses tickets
+    $stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut, id_user FROM tickets WHERE id_user = ?");
+    $stmt->execute([$_SESSION['id_users']]);
+}
+
 $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -33,6 +43,9 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Catégorie</th>
                             <th>Date de création</th>
                             <th>Statut</th>
+                            <?php if ($_SESSION['droits'] == 1): ?> <!-- Si administrateur -->
+                                <th>Actions</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,6 +55,12 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($ticket['categorie']); ?></td>
                                 <td><?php echo date('d/m/Y H:i', strtotime($ticket['date_creation'])); ?></td>
                                 <td><?php echo htmlspecialchars($ticket['statut']); ?></td>
+                                <?php if ($_SESSION['droits'] == 1): ?> <!-- Si administrateur -->
+                                    <td>
+                                        <a href="modifier_statut.php?id=<?php echo $ticket['id_ticket']; ?>">Modifier Statut</a> | 
+                                        <a href="supprimer_ticket.php?id=<?php echo $ticket['id_ticket']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')">Supprimer</a>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

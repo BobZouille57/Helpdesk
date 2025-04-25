@@ -93,6 +93,44 @@ td a:hover {
     text-decoration: underline;
 }
 
+/* Boutons Admin */
+
+.action-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-modifier {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-modifier:hover {
+    background-color: #218838;
+}
+
+.btn-supprimer {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-supprimer:hover {
+    background-color: #c82333;
+}
+
+select {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .ticket-list {
@@ -103,3 +141,5 @@ td a:hover {
         font-size: 14px;
     }
 }
+
+

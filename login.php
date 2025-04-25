@@ -71,15 +71,18 @@ if (isset($_POST['login'])) {
         $password = $_POST['password'];
 
         try {
-            $stmt = $pdo->prepare("SELECT id_users, nom, prenom, password FROM users WHERE LOWER(mail) = ?");
+            // On récupère aussi 'droits' ici 👇
+            $stmt = $pdo->prepare("SELECT id_users, nom, prenom, password, droits FROM users WHERE LOWER(mail) = ?");
             $stmt->execute([$mail]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+            // Connexion réussie
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['id_users'] = $user['id_users'];
                 $_SESSION['user_name'] = $user['nom'] . ' ' . $user['prenom'];
+                $_SESSION['droits'] = $user['droits'];
 
-                header("Location: index.php");
+                header("Location: index.php");  // Redirection sans ouvrir un nouvel onglet
                 exit();
             } else {
                 $message = "❌ Email ou mot de passe incorrect.";
