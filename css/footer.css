@@ -7,9 +7,14 @@ html, body {
 }
 
 body {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+}
+
+main {
     flex-grow: 1;
+    padding-top: 40px;
+    margin-bottom: 40px;
+    box-sizing: border-box;
 }
 
 header {
@@ -23,13 +28,6 @@ header {
     margin-bottom: 20px;
 }
 
-main {
-    flex-grow: 1;
-    padding-top: 100px;
-    margin-bottom: 40px;  /* Ajout d'espace avant le footer */
-    box-sizing: border-box;
-}
-
 footer {
     padding: 20px;
     background: linear-gradient(135deg, #007bff, #0056b3);
@@ -38,7 +36,7 @@ footer {
     text-align: center;
     width: 100%;
     position: relative;
-    margin-top: auto;  /* Cela pousse le footer vers le bas */
+    margin-top: auto;
 }
 
 .footer-container {
@@ -81,16 +79,16 @@ li::marker {
 }
 
 @media (max-width: 768px) {
+    .footer-links a {
+        display: block;
+        margin: 10px 0;
+    }
+
     footer {
         padding: 15px;
     }
 
-    .footer-links a {
-        margin: 10px 0;
-        display: block;
-    }
-
     main {
-        padding-top: 80px; /* Ajuste la valeur selon la hauteur de ton header sur mobile */
+        padding-top: 80px;
     }
 }
