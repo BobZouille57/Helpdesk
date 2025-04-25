@@ -1,17 +1,16 @@
 <?php
 require_once 'bdd.php';
-session_start();
-
 
 try {
     $stmt = $pdo->prepare("SELECT nom, prenom, avatar FROM users WHERE id_users = ?");
     if (!empty($_SESSION['id_users'])) {
-        $stmt->execute([$_SESSION['id_users']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-    if ($user) {
-        $user_name = $user['prenom'] . ' ' . $user['nom'];
-        $avatar = $user['avatar'];
+            $stmt->execute([$_SESSION['id_users']]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($user) {
+            $user_name = $user['prenom'] . ' ' . $user['nom'];
+            $avatar = $user['avatar'];
+        }
     }
 } catch (PDOException $e) {
     die("❌ Erreur lors de la récupération des informations utilisateur : " . $e->getMessage());
