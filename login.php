@@ -9,32 +9,28 @@ if (isset($_POST['register'])) {
         $prenom = trim($_POST['prenom']);
         $mail = strtolower(trim($_POST['mail']));
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $avatarPath = ''; // Valeur par défaut si pas d'avatar
+        $avatarPath = '';
 
         if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
             $avatar = $_FILES['avatar'];
             $avatarExtension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
-            // Vérifie les erreurs d'upload
             if ($avatar['error'] !== UPLOAD_ERR_OK) {
                 $message = "❌ Erreur d'upload : " . $avatar['error'];
             }
 
-            // Vérifier que l'extension est autorisée
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
                 $uploadDirectory = __DIR__ . '/assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
 
-                // Vérifie que le dossier est accessible en écriture
                 if (!is_writable($uploadDirectory)) {
                     $message = "❌ Le dossier d'upload n'a pas les bonnes permissions.";
                 }
 
-                // Déplacer le fichier téléchargé dans le dossier d'upload
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
-                    $avatarPath = 'assets/upload/' . $avatarName; // Pour l'affichage web plus tard
+                    $avatarPath = 'assets/upload/' . $avatarName;
                 } else {
                     $message = "❌ Erreur lors du téléchargement de l'avatar.";
                 }

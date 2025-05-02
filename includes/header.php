@@ -40,7 +40,7 @@ try {
         <div class="avatar">
             <?php if (!empty($_SESSION['id_users'])) { ?>
                 <?php if ($avatar): ?>
-                    <img src="/assets/upload/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
+                    <img src="<?php echo htmlspecialchars($avatar); ?>" alt="Avatar de <?php echo htmlspecialchars($user_name); ?>" width="50" class="rounded-circle">
                 <?php else: ?>
                     <img src="/assets/upload/default-avatar.png" alt="Avatar par défaut" width="50" class="rounded-circle">
                 <?php endif; ?>
