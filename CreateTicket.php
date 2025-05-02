@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut) VALUES (?, ?, ?, ?, 'En attente')");
             $stmt->execute([$titre, $categorie, $description, $user_id]);
-            $ticketId = $pdo->lastInsertId();  // Récupère l'ID du ticket nouvellement créé
+            $ticketId = $pdo->lastInsertId();
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
             echo "<script>
