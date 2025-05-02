@@ -16,11 +16,21 @@ if (isset($_POST['register'])) {
             $avatarExtension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
+            // Vérifie les erreurs d'upload
+            if ($avatar['error'] !== UPLOAD_ERR_OK) {
+                $message = "❌ Erreur d'upload : " . $avatar['error'];
+            }
+
             // Vérifier que l'extension est autorisée
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
                 $uploadDirectory = __DIR__ . '/assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
+
+                // Vérifie que le dossier est accessible en écriture
+                if (!is_writable($uploadDirectory)) {
+                    $message = "❌ Le dossier d'upload n'a pas les bonnes permissions.";
+                }
 
                 // Déplacer le fichier téléchargé dans le dossier d'upload
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
