@@ -18,11 +18,11 @@ if (isset($_POST['register'])) {
 
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
-                $uploadDirectory = '/assets/upload/';
+                $uploadDirectory = __DIR__ . '/assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
 
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
-                    $avatarPath = $avatarName;
+                    $avatarPath = 'assets/upload/' . $avatarName; // pour l'affichage web plus tard
                 } else {
                     $message = "❌ Erreur lors du téléchargement de l'avatar.";
                 }
