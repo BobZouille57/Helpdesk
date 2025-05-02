@@ -2,8 +2,6 @@
 require_once 'includes/header.php';
 require_once 'includes/bdd.php';
 
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titre = trim($_POST['titre']);
     $categorie = trim($_POST['categorie']);
@@ -14,7 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut) VALUES (?, ?, ?, ?, 'En attente')");
             $stmt->execute([$titre, $categorie, $description, $user_id]);
-            $successMessage = "Ticket créé avec succès !";
+            $ticketId = $pdo->lastInsertId();  // Récupère l'ID du ticket nouvellement créé
+            $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
+
+            // Ajout d'un délai de redirection de 3 secondes
+            echo "<script>
+                    setTimeout(function() {
+                        window.location.href = 'ticket.php?id=" . $ticketId . "';
+                    }, 3000);
+                  </script>";
+
         } catch (PDOException $e) {
             $errorMessage = "Erreur lors de la création du ticket : " . $e->getMessage();
         }
