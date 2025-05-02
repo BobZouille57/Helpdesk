@@ -144,45 +144,52 @@ textarea:focus {
 }
 
 .badge-admin {
-    background-color: #28a745;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background-color: #dc3545; /* Rouge vif */
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 12px;
     margin-left: 10px;
+    vertical-align: middle;
 }
 
 .badge-user {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
+    background-color: #007bff; /* Bleu */
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 12px;
     margin-left: 10px;
+    vertical-align: middle;
 }
 
 .btn-trash {
     background-color: transparent;
     border: none;
     color: #dc3545;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
 .btn-trash:hover {
     color: #c82333;
+    transform: scale(1.1);
+}
+
+.reponse-item {
+    position: relative;
+    margin-bottom: 20px;
 }
 
 .reponse-item form {
-    display: inline;
-    float: right;
-    margin-top: -20px; /* Ajuste la position du bouton pour l'aligner avec la date */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
 }
-
-.reponse-item small {
-    margin-right: 10px;
-}
-
 
 /* Responsive */
 @media (max-width: 768px) {
