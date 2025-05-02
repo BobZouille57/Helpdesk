@@ -9,20 +9,22 @@ if (isset($_POST['register'])) {
         $prenom = trim($_POST['prenom']);
         $mail = strtolower(trim($_POST['mail']));
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $avatarPath = ''; 
+        $avatarPath = ''; // Valeur par défaut si pas d'avatar
 
         if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
             $avatar = $_FILES['avatar'];
             $avatarExtension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
+            // Vérifier que l'extension est autorisée
             if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
                 $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
                 $uploadDirectory = __DIR__ . '/assets/upload/';
                 $uploadPath = $uploadDirectory . $avatarName;
 
+                // Déplacer le fichier téléchargé dans le dossier d'upload
                 if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
-                    $avatarPath = 'assets/upload/' . $avatarName; // pour l'affichage web plus tard
+                    $avatarPath = 'assets/upload/' . $avatarName; // Pour l'affichage web plus tard
                 } else {
                     $message = "❌ Erreur lors du téléchargement de l'avatar.";
                 }
@@ -32,6 +34,7 @@ if (isset($_POST['register'])) {
         }
 
         try {
+            // Vérification de l'existence du rôle 'User'
             $stmt = $pdo->prepare("SELECT id_droits FROM droits WHERE libelle_droits = 'User'");
             $stmt->execute();
             $droits = $stmt->fetchColumn();
@@ -39,6 +42,7 @@ if (isset($_POST['register'])) {
             if (!$droits) {
                 $message = "❌ Erreur : le rôle 'User' n'existe pas dans la table 'droits'.";
             } else {
+                // Vérification que l'email n'est pas déjà utilisé
                 $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE LOWER(mail) = ?");
                 $stmt->execute([$mail]);
                 $count = $stmt->fetchColumn();
@@ -46,6 +50,7 @@ if (isset($_POST['register'])) {
                 if ($count > 0) {
                     $message = "❌ Cet email est déjà utilisé.";
                 } else {
+                    // Insertion dans la base de données
                     $stmt = $pdo->prepare("INSERT INTO users (nom, prenom, mail, password, droits, avatar) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->execute([$nom, $prenom, $mail, $password, $droits, $avatarPath]);
 
@@ -66,7 +71,7 @@ if (isset($_POST['login'])) {
         $password = $_POST['password'];
 
         try {
-            // On récupère aussi 'droits' ici 👇
+            // Récupération des informations de l'utilisateur (y compris droits)
             $stmt = $pdo->prepare("SELECT id_users, nom, prenom, password, droits FROM users WHERE LOWER(mail) = ?");
             $stmt->execute([$mail]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
