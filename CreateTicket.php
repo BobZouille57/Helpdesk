@@ -15,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ticketId = $pdo->lastInsertId();  // Récupère l'ID du ticket nouvellement créé
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
-            // Ajout d'un délai de redirection de 3 secondes
             echo "<script>
                     setTimeout(function() {
-                        window.location.href = 'ticket.php?id=" . $ticketId . "';
+                        window.location.href = 'TicketDetails.php?id=" . $ticketId . "';
                     }, 3000);
                   </script>";
 
