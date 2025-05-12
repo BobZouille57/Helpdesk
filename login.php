@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         </section>
         <section>
             <p>Pas encore de compte ? <a href="register.php">Inscrivez-vous ici</a></p>
+            <p><a href="forgot_password.php">Mot de passe oublié ?</a></p>
         </section>
     </main>
 </body>
