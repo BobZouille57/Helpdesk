@@ -20,11 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->Port = 587;
 
         $mail->setFrom($user_email, 'Utilisateur de formulaire de contact');
-        $mail->addReplyTo($user_email);
+        $mail->addReplyTo($user_email, $user_name);
         $mail->addAddress('Pierron.clement57@gmail.com');
 
         $mail->Subject = 'Nouveau message de contact : ' . $subject;
-        $mail->Body    = 'Email de l\'utilisateur : ' . $user_email . "\n" .
+        $mail->Body    = 'Email de l\'utilisateur : ' . $user_name. "\n" .
                          'Message : ' . $message;
 
         if ($mail->send()) {
