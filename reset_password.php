@@ -33,7 +33,7 @@ if ($token) {
                 $stmt->execute([$hash, $row['id_users']]);
                 $stmt = $pdo->prepare("DELETE FROM password_resets WHERE id_reset = ?");
                 $stmt->execute([$row['id_reset']]);
-                $message   = '✅ Mot de passe réinitialisé. Vous pouvez vous <a href="login.php">connecter</a>.';
+                $message   = '✅ Mot de passe réinitialisé. Vous pouvez vous <a href="login.php">connecter</a>';
                 $isSuccess = true;
                 $valid     = false;
             }

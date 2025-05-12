@@ -65,7 +65,7 @@ if (isset($_GET['registered']) && $_GET['registered'] === 'true') {
         <button type="submit">Se connecter</button>
     </form>
 
-    <a href="forgot_password.php">Mot de passe oublié ?</a>
+    <u><a href="forgot_password.php">Mot de passe oublié ?</a></u>
     <a href="register.php">Pas encore de compte ? Inscrivez-vous</a>
 </main>
 </body>
