@@ -3,75 +3,7 @@ require_once 'includes/bdd.php';
 
 $message = '';
 
-if (isset($_POST['register'])) {
-    if (!empty($_POST['nom']) && !empty($_POST['prenom']) && !empty($_POST['mail']) && !empty($_POST['password'])) {
-        $nom = trim($_POST['nom']);
-        $prenom = trim($_POST['prenom']);
-        $mail = strtolower(trim($_POST['mail']));
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $avatarPath = '';
-
-        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
-            $avatar = $_FILES['avatar'];
-            $avatarExtension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-            if ($avatar['error'] !== UPLOAD_ERR_OK) {
-                $message = "❌ Erreur d'upload : " . $avatar['error'];
-            }
-
-            if (in_array(strtolower($avatarExtension), $allowedExtensions)) {
-                $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
-                $uploadDirectory = __DIR__ . '/assets/upload/';
-                $uploadPath = $uploadDirectory . $avatarName;
-
-                if (!is_writable($uploadDirectory)) {
-                    $message = "❌ Le dossier d'upload n'a pas les bonnes permissions.";
-                }
-
-                if (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
-                    $avatarPath = 'assets/upload/' . $avatarName;
-                } else {
-                    $message = "❌ Erreur lors du téléchargement de l'avatar.";
-                }
-            } else {
-                $message = "❌ Format d'avatar invalide. Seules les images JPG, JPEG, PNG et GIF sont autorisées.";
-            }
-        }
-
-        try {
-            // Vérification de l'existence du rôle 'User'
-            $stmt = $pdo->prepare("SELECT id_droits FROM droits WHERE libelle_droits = 'User'");
-            $stmt->execute();
-            $droits = $stmt->fetchColumn();
-
-            if (!$droits) {
-                $message = "❌ Erreur : le rôle 'User' n'existe pas dans la table 'droits'.";
-            } else {
-                // Vérification que l'email n'est pas déjà utilisé
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE LOWER(mail) = ?");
-                $stmt->execute([$mail]);
-                $count = $stmt->fetchColumn();
-
-                if ($count > 0) {
-                    $message = "❌ Cet email est déjà utilisé.";
-                } else {
-                    // Insertion dans la base de données
-                    $stmt = $pdo->prepare("INSERT INTO users (nom, prenom, mail, password, droits, avatar) VALUES (?, ?, ?, ?, ?, ?)");
-                    $stmt->execute([$nom, $prenom, $mail, $password, $droits, $avatarPath]);
-
-                    $message = '✅ Inscription réussie ! Vous pouvez maintenant vous connecter.';
-                }
-            }
-        } catch (PDOException $e) {
-            $message = "❌ Erreur SQL : " . $e->getMessage();
-        }
-    } else {
-        $message = "❌ Tous les champs sont obligatoires.";
-    }
-}
-
-if (isset($_POST['login'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     if (!empty($_POST['mail']) && !empty($_POST['password'])) {
         $mail = strtolower(trim($_POST['mail']));
         $password = $_POST['password'];
@@ -88,7 +20,7 @@ if (isset($_POST['login'])) {
                 $_SESSION['user_name'] = $user['nom'] . ' ' . $user['prenom'];
                 $_SESSION['droits'] = $user['droits'];
 
-                header("Location: index.php");  // Redirection sans ouvrir un nouvel onglet
+                header("Location: index.php");  // Redirection vers la page principale
                 exit();
             } else {
                 $message = "❌ Email ou mot de passe incorrect.";
@@ -116,6 +48,9 @@ if (isset($_POST['login'])) {
     </header>
     <main>
         <p class="error"><?php echo htmlspecialchars($message); ?></p>
+        <?php if (isset($_GET['registered']) && $_GET['registered'] == 'true'): ?>
+            <p class="success">✅ Compte créé avec succès ! Vous pouvez maintenant vous connecter.</p>
+        <?php endif; ?>
         <section>
             <h2>Connexion</h2>
             <form method="POST">
@@ -128,21 +63,7 @@ if (isset($_POST['login'])) {
             </form>
         </section>
         <section>
-            <h2>Inscription</h2>
-            <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="register" value="1">
-                <label for="nom">Nom :</label>
-                <input type="text" name="nom" required>
-                <label for="prenom">Prénom :</label>
-                <input type="text" name="prenom" required>
-                <label for="mail">Email :</label>
-                <input type="email" name="mail" required>
-                <label for="password">Mot de passe :</label>
-                <input type="password" name="password" required>
-                <label for="avatar">Avatar :</label>
-                <input type="file" name="avatar" accept="image/*">
-                <button type="submit">S'inscrire</button>
-            </form>
+            <p>Pas encore de compte ? <a href="register.php">Inscrivez-vous ici</a></p>
         </section>
     </main>
 </body>
