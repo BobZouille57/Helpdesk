@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $link     = "{$protocol}://{$_SERVER['HTTP_HOST']}/reset_password.php?token={$token}";
 
             $mail = new PHPMailer(true);
+            $mail->CharSet = 'UTF-8'; 
             try {
                 $mail->isSMTP();
                 $mail->Host       = 'smtp.gmail.com';
