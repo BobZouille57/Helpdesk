@@ -59,6 +59,7 @@ try {
                 <li><a class="dropdown-item" href="CreateTicket.php">Créer un ticket</a></li>
                 <li><a class="dropdown-item" href="HistTicket.php">Tickets</a></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="account.php">Mon compte</a></li>
                 <li><a class="dropdown-item text-danger" href="logout.php">Se déconnecter</a></li>
             </ul>
         </div>

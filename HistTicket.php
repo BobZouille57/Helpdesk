@@ -2,16 +2,12 @@
 require_once 'includes/header.php';
 require_once 'includes/bdd.php';
 
-
-
 $stmt = null;
 
-// Si l'utilisateur est administrateur (droits = 1), on récupère tous les tickets
 if ($_SESSION['droits'] == 1) {
     $stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut, id_user FROM tickets");
     $stmt->execute();
 } else {
-    // Si c'est un utilisateur normal, on récupère uniquement ses tickets
     $stmt = $pdo->prepare("SELECT id_ticket, titre, categorie, date_creation, statut, id_user FROM tickets WHERE id_user = ?");
     $stmt->execute([$_SESSION['id_users']]);
 }
@@ -40,7 +36,7 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Catégorie</th>
                             <th>Date de création</th>
                             <th>Statut</th>
-                            <?php if ($_SESSION['droits'] == 1): ?> <!-- Si administrateur -->
+                            <?php if ($_SESSION['droits'] == 1): ?>
                                 <th>Actions</th>
                             <?php endif; ?>
                         </tr>
@@ -52,7 +48,7 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td><?php echo htmlspecialchars($ticket['categorie']); ?></td>
                                 <td><?php echo date('d/m/Y H:i', strtotime($ticket['date_creation'])); ?></td>
                                 <td><?php echo htmlspecialchars($ticket['statut']); ?></td>
-                                <?php if ($_SESSION['droits'] == 1): ?> <!-- Si administrateur -->
+                                <?php if ($_SESSION['droits'] == 1): ?>
                                     <td>
                                         <a href="modifier_statut.php?id=<?php echo $ticket['id_ticket']; ?>">Modifier Statut</a> | 
                                         <a href="supprimer_ticket.php?id=<?php echo $ticket['id_ticket']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')">Supprimer</a>
