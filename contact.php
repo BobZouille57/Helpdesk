@@ -23,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->addReplyTo($user_email, $user_name);
         $mail->addAddress('Pierron.clement57@gmail.com');
 
-        $mail->Subject = 'Nouveau message de contact : ' . $subject;
-        $mail->Body    = 'Email de l\'utilisateur : ' . $user_name. "\n" .
+        $mail->Subject = 'Nouveau message du HelpDesk : ' . $subject;
+        $mail->Body    = 'Email de l\'utilisateur : ' . $user_email. "\n" .
                          'Message : ' . $message;
 
         if ($mail->send()) {
