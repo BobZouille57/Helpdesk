@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 02 mai 2025 à 11:52
--- Version du serveur : 8.0.41-0ubuntu0.24.04.1
+-- Généré le : lun. 12 mai 2025 à 12:33
+-- Version du serveur : 8.0.42-0ubuntu0.24.04.1
 -- Version de PHP : 8.3.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -39,6 +39,19 @@ CREATE TABLE `droits` (
 INSERT INTO `droits` (`id_droits`, `libelle_droits`) VALUES
 (1, 'Admin'),
 (2, 'User');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `id_reset` int NOT NULL,
+  `id_user` int NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -97,6 +110,13 @@ ALTER TABLE `droits`
   ADD PRIMARY KEY (`id_droits`);
 
 --
+-- Index pour la table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`id_reset`),
+  ADD KEY `id_user` (`id_user`);
+
+--
 -- Index pour la table `reponses`
 --
 ALTER TABLE `reponses`
@@ -129,26 +149,38 @@ ALTER TABLE `droits`
   MODIFY `id_droits` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT pour la table `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `id_reset` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT pour la table `reponses`
 --
 ALTER TABLE `reponses`
-  MODIFY `id_reponse` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_reponse` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT pour la table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id_ticket` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_ticket` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_users` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_users` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD CONSTRAINT `password_resets_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_users`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `users`
