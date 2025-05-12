@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->Port = 587;
 
         $mail->setFrom($user_email, 'Utilisateur de formulaire de contact');
-        $mail->addReplyTo($user_email, $user_name);
+        $mail->addReplyTo($user_email);
         $mail->addAddress('Pierron.clement57@gmail.com');
 
         $mail->Subject = 'Nouveau message du HelpDesk : ' . $subject;
