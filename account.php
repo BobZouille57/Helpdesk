@@ -37,6 +37,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    if (isset($_POST['update_avatar'])) {
+        if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
+            $avatar = $_FILES['avatar'];
+            $avatarExtension = pathinfo($avatar['name'], PATHINFO_EXTENSION);
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            if (!in_array(strtolower($avatarExtension), $allowedExtensions)) {
+                $message = "❌ Format d'avatar invalide. Seules les images JPG, JPEG, PNG et GIF sont autorisées.";
+            } else {
+                $avatarName = 'avatar_' . time() . '.' . $avatarExtension;
+                $uploadDirectory = __DIR__ . '/assets/upload/';
+                $uploadPath = $uploadDirectory . $avatarName;
+
+                if (!is_writable($uploadDirectory)) {
+                    $message = "❌ Le dossier d'upload n'a pas les bonnes permissions.";
+                } elseif (move_uploaded_file($avatar['tmp_name'], $uploadPath)) {
+                    $avatarPath = 'assets/upload/' . $avatarName;
+
+                    $stmt = $pdo->prepare("UPDATE users SET avatar = ? WHERE id_users = ?");
+                    $stmt->execute([$avatarPath, $_SESSION['id_users']]);
+
+                    $message = "✅ Avatar mis à jour avec succès.";
+                    $user['avatar'] = $avatarPath;
+                } else {
+                    $message = "❌ Erreur lors du téléchargement de l'avatar.";
+                }
+            }
+        } else {
+            $message = "❌ Aucun fichier sélectionné.";
+        }
+    }
+
     if (isset($_POST['delete_account'])) {
         $stmt = $pdo->prepare("DELETE FROM users WHERE id_users = ?");
         $stmt->execute([$_SESSION['id_users']]);
@@ -71,6 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p><strong>Prénom :</strong> <?php echo htmlspecialchars($user['prenom']); ?></p>
             <p><strong>Email :</strong> <?php echo htmlspecialchars($user['mail']); ?></p>
         </div>
+
+        <form method="POST" enctype="multipart/form-data" class="form-section">
+            <h3>Modifier l'avatar</h3>
+            <input type="file" name="avatar" accept="image/*" required>
+            <button type="submit" name="update_avatar" class="action-btn btn-modifier">Mettre à jour l'avatar</button>
+        </form>
 
         <form method="POST" class="form-section">
             <h3>Modifier les informations</h3>
