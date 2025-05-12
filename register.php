@@ -75,7 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         <h1>HelpDesk | Inscription</h1>
     </header>
     <main>
-        <p class="error"><?php echo htmlspecialchars($message); ?></p>
+        <?php if (!empty($message)): ?>
+            <p class="error"><?php echo htmlspecialchars($message); ?></p>
+        <?php endif; ?>
         <section>
             <h2>Inscription</h2>
             <form method="POST" enctype="multipart/form-data">
