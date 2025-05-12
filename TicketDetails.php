@@ -23,7 +23,6 @@ if (isset($_GET['id'])) {
     }
 }
 
-// Ajout d'une réponse
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty($_POST['message'])) {
     $message = trim($_POST['message']);
     if (!empty($message)) {
@@ -39,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message']) && !empty(
     }
 }
 
-// Récupération des réponses
 $stmt = $pdo->prepare("SELECT reponses.*, users.prenom, users.nom, users.droits FROM reponses 
                        JOIN users ON reponses.id_user = users.id_users 
                        WHERE reponses.id_ticket = ? 
@@ -47,7 +45,6 @@ $stmt = $pdo->prepare("SELECT reponses.*, users.prenom, users.nom, users.droits 
 $stmt->execute([$ticket_id]);
 $reponses = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Suppression d'une réponse (si administrateur)
 if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
     if ($_SESSION['droits'] == 1) {
         $stmt = $pdo->prepare("DELETE FROM reponses WHERE id_reponse = ?");
@@ -63,7 +60,7 @@ if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails du Ticket</title>
+    <title>HelpDesk - Détails Ticket</title>
     <link rel="stylesheet" href="/assets/css/TicketDetails.css">
 </head>
 <body>
@@ -75,7 +72,6 @@ if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
             <p><strong>Statut:</strong> <?php echo htmlspecialchars($ticket['statut']); ?></p>
             <p><strong>Description:</strong> <?php echo nl2br(htmlspecialchars($ticket['description'])); ?></p>
 
-            <!-- Formulaire pour ajouter une réponse -->
             <?php if ($ticket['statut'] != 'Résolu'): ?>
                 <form action="TicketDetails.php?id=<?php echo $ticket_id; ?>" method="POST">
                     <textarea name="message" rows="5" class="form-control" placeholder="Votre réponse..." required></textarea>
@@ -87,7 +83,6 @@ if (isset($_POST['supprimer_reponse']) && isset($_POST['id_reponse'])) {
                 </div>
             <?php endif; ?>
 
-            <!-- Message de succès ou d'erreur -->
             <?php if (isset($successMessage)): ?>
                 <div class="alert alert-success"><?php echo htmlspecialchars($successMessage); ?></div>
             <?php elseif (isset($errorMessage)): ?>

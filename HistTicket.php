@@ -24,7 +24,7 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historique des Tickets</title>
+    <title>HelpDesk - Historique des Tickets</title>
     <link rel="stylesheet" href="/assets/css/HistTicket.css">
 </head>
 <body>
