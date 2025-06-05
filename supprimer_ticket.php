@@ -35,19 +35,30 @@ if (isset($_GET['id'])) {
             $stmtReponses->execute([$id_ticket]);
             $reponses = $stmtReponses->fetchAll(PDO::FETCH_ASSOC);
 
+            // Récupérer les réponses liées
+            $stmtReponses = $pdo->prepare("SELECT * FROM reponses WHERE id_ticket = ?");
+            $stmtReponses->execute([$id_ticket]);
+            $reponses = $stmtReponses->fetchAll(PDO::FETCH_ASSOC);
+
             // Archiver chaque réponse
-            foreach ($reponses as $reponse) {
+            if (!empty($reponses)) {
                 $stmtInsertReponse = $pdo->prepare("
                     INSERT INTO reponses_supp 
                     (id_reponse, id_ticket, id_user, reponse, date_reponse)
                     VALUES (?, ?, ?, ?, ?)
                 ");
-                $stmtInsertReponse->execute([
-                    $reponse['id_reponse'], $reponse['id_ticket'],
-                    $reponse['id_user'], $reponse['reponse'],
-                    $reponse['date_reponse']
-                ]);
+                
+                foreach ($reponses as $reponse) {
+                    $stmtInsertReponse->execute([
+                        $reponse['id_reponse'],
+                        $reponse['id_ticket'],
+                        $reponse['id_user'],
+                        $reponse['reponse'],
+                        $reponse['date_reponse']
+                    ]);
+                }
             }
+
 
             // Supprimer les réponses originales
             $stmtDeleteReponses = $pdo->prepare("DELETE FROM reponses WHERE id_ticket = ?");
