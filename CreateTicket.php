@@ -1,6 +1,11 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/bdd.php';
+require 'PHPMailer-master/src/PHPMailer.php'; 
+require 'PHPMailer-master/src/SMTP.php'; 
+require 'PHPMailer-master/src/Exception.php'; 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titre = trim($_POST['titre']);
@@ -15,6 +20,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$titre, $categorie, $description, $user_id, $priorite]);
             $ticketId = $pdo->lastInsertId();
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
+
+            // Envoi du mail si priorité urgente
+            if ($priorite === "Urgente") {
+                // Récupère tous les mails des admins
+                $stmtAdmin = $pdo->query("SELECT mail FROM users WHERE droits = 1");
+                $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
+
+                $mail = new PHPMailer(true);
+                $mail->CharSet = 'UTF-8';
+
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'Pierron.clement57@gmail.com'; 
+                    $mail->Password = 'hyxz subn rcbl zljk'; 
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
+
+                    $mail->setFrom('noreply@helpdesk.com', 'HelpDesk');
+                    $mail->Subject = "🚨 Ticket URGENT créé";
+                    $mail->Body = "Un ticket urgent a été soumis par un utilisateur.\n\n"
+                                . "Titre : $titre\n"
+                                . "Catégorie : $categorie\n"
+                                . "Description : $description\n"
+                                . "Lien vers le ticket : http://helpdesk.clementpierron.fr/TicketDetails.php?id=$ticketId";
+
+                    foreach ($admins as $admin) {
+                        $mail->addAddress($admin['mail']);
+                    }
+
+                    $mail->send();
+                } catch (Exception $e) {
+                    error_log("Erreur PHPMailer : " . $mail->ErrorInfo);
+                }
+            }
 
             echo "<script>
                     setTimeout(function() {
