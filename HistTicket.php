@@ -52,7 +52,9 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($tickets as $ticket): ?>
+                        <?php foreach ($tickets as $ticket):
+                        echo ($ticket['priorite']);
+                        ?>
                             <?php
                                 $class = '';
                                 switch ($ticket['priorite']) {
