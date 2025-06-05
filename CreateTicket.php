@@ -5,13 +5,14 @@ require_once 'includes/bdd.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titre = trim($_POST['titre']);
     $categorie = trim($_POST['categorie']);
+    $priorite = trim($_POST['priorite']);
     $description = trim($_POST['description']);
     $user_id = $_SESSION['id_users'];
 
-    if (!empty($titre) && !empty($categorie) && !empty($description)) {
+    if (!empty($titre) && !empty($categorie) && !empty($priorite) && !empty($description)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut) VALUES (?, ?, ?, ?, 'En attente')");
-            $stmt->execute([$titre, $categorie, $description, $user_id]);
+            $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut, priorite) VALUES (?, ?, ?, ?, 'En attente', ?)");
+            $stmt->execute([$titre, $categorie, $description, $user_id, $priorite]);
             $ticketId = $pdo->lastInsertId();
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
@@ -62,6 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="Problème Technique">Problème Technique</option>
                         <option value="Demande d'information">Demande d'information</option>
                         <option value="Autre">Autre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="priorite">Priorité</label>
+                    <select id="priorite" name="priorite" class="form-control" required>
+                        <option value="">Sélectionnez une priorité</option>
+                        <option value="Basse">Basse</option>
+                        <option value="Moyenne">Moyenne</option>
+                        <option value="Haute">Haute</option>
+                        <option value="Urgente">Urgente</option>
                     </select>
                 </div>
 
