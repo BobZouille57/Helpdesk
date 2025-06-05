@@ -142,7 +142,6 @@ select {
     }
 }
 
-/* Couleurs de fond et texte forcées pour les lignes selon priorité */
 tr.urgent td {
     background-color: #f44336 !important; /* rouge */
     color: white !important;
@@ -162,6 +161,7 @@ tr.basse td {
     background-color: #4caf50 !important; /* vert */
     color: white !important;
 }
+
 
 
 
