@@ -1,9 +1,10 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/bdd.php';
-require 'PHPMailer-master/src/PHPMailer.php'; 
-require 'PHPMailer-master/src/SMTP.php'; 
-require 'PHPMailer-master/src/Exception.php'; 
+require 'PHPMailer-master/src/PHPMailer.php';
+require 'PHPMailer-master/src/SMTP.php';
+require 'PHPMailer-master/src/Exception.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -16,55 +17,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!empty($titre) && !empty($categorie) && !empty($priorite) && !empty($description)) {
         try {
+            // Création du ticket
             $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut, priorite) VALUES (?, ?, ?, ?, 'En attente', ?)");
             $stmt->execute([$titre, $categorie, $description, $user_id, $priorite]);
             $ticketId = $pdo->lastInsertId();
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
+            // Envoi d'un mail si priorité urgente
             if ($priorite === "Urgente") {
                 try {
                     $stmtAdmin = $pdo->query("SELECT mail FROM users WHERE droits = 1");
                     $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
 
                     if ($admins) {
-                        $mail = new PHPMailer(true);
-                        $mail->CharSet = 'UTF-8';
-
-                        $mail->isSMTP();
-                        $mail->Host = 'smtp.gmail.com';
-                        $mail->SMTPAuth = true;
-                        $mail->Username = 'Pierron.clement57@gmail.com';
-                        $mail->Password = 'hyxz subn rcbl zljk';
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = 587;
-
-                        $mail->setFrom('noreply@helpdesk.com', 'HelpDesk');
-                        $mail->Subject = "🚨 Nouveau Ticket URGENT";
-                        $mail->Body = "Un ticket urgent a été soumis par un utilisateur.\n\n"
-                                    . "Titre : $titre\n"
-                                    . "Catégorie : $categorie\n"
-                                    . "Description : $description\n"
-                                    . "Lien : http://votre-domaine/TicketDetails.php?id=$ticketId";
-
                         foreach ($admins as $admin) {
-                            $mail->addAddress($admin['mail']);
-                        }
+                            $mail = new PHPMailer(true);
+                            $mail->CharSet = 'UTF-8';
+                            $mail->isSMTP();
+                            $mail->Host = 'smtp.gmail.com';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'Pierron.clement57@gmail.com';
+                            $mail->Password = 'hyxz subn rcbl zljk'; // mot de passe d'application Gmail
+                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port = 587;
 
-                        $mail->send();
+                            $mail->setFrom('Pierron.clement57@gmail.com', 'HelpDesk System');
+                            $mail->addAddress($admin['mail']);
+                            $mail->Subject = 'Nouveau ticket urgent créé';
+                            $mail->Body = "Un nouveau ticket urgent vient d'être créé :\n\nTitre : $titre\nDescription : $description";
+
+                            $mail->send();
+                        }
                     }
                 } catch (Exception $e) {
-                    error_log("Erreur PHPMailer : " . $mail->ErrorInfo);
-                    // Ne bloque pas le script : pas de die() ou exit()
+                    error_log("Erreur lors de l'envoi du mail : " . $e->getMessage());
                 }
             }
 
-
+            // Redirection après 3s
+            echo "<div class='alert alert-success'>" . htmlspecialchars($successMessage) . "</div>";
             echo "<script>
                     setTimeout(function() {
                         window.location.href = 'TicketDetails.php?id=" . $ticketId . "';
                     }, 3000);
                   </script>";
-
         } catch (PDOException $e) {
             $errorMessage = "Erreur lors de la création du ticket : " . $e->getMessage();
         }
@@ -88,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2>Créer un Ticket</h2>
 
             <?php if (isset($successMessage)) : ?>
-                <div class="alert alert-success"><?php echo htmlspecialchars($successMessage); ?></div>
+                <!-- Affiché déjà plus haut pour laisser le temps à l'utilisateur de le voir -->
             <?php elseif (isset($errorMessage)) : ?>
                 <div class="alert alert-danger"><?php echo htmlspecialchars($errorMessage); ?></div>
             <?php endif; ?>
