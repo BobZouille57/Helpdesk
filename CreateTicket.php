@@ -21,41 +21,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ticketId = $pdo->lastInsertId();
             $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
-            // Envoi du mail si priorité urgente
             if ($priorite === "Urgente") {
-                // Récupère tous les mails des admins
-                $stmtAdmin = $pdo->query("SELECT mail FROM users WHERE droits = 1");
-                $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
-
-                $mail = new PHPMailer(true);
-                $mail->CharSet = 'UTF-8';
-
                 try {
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com';
-                    $mail->SMTPAuth = true;
-                    $mail->Username = 'Pierron.clement57@gmail.com'; 
-                    $mail->Password = 'hyxz subn rcbl zljk'; 
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port = 587;
+                    $stmtAdmin = $pdo->query("SELECT mail FROM users WHERE droits = 1");
+                    $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
 
-                    $mail->setFrom('noreply@helpdesk.com', 'HelpDesk');
-                    $mail->Subject = "🚨 Ticket URGENT créé";
-                    $mail->Body = "Un ticket urgent a été soumis par un utilisateur.\n\n"
-                                . "Titre : $titre\n"
-                                . "Catégorie : $categorie\n"
-                                . "Description : $description\n"
-                                . "Lien vers le ticket : http://helpdesk.clementpierron.fr/TicketDetails.php?id=$ticketId";
+                    if ($admins) {
+                        $mail = new PHPMailer(true);
+                        $mail->CharSet = 'UTF-8';
 
-                    foreach ($admins as $admin) {
-                        $mail->addAddress($admin['mail']);
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'Pierron.clement57@gmail.com';
+                        $mail->Password = 'hyxz subn rcbl zljk';
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+
+                        $mail->setFrom('noreply@helpdesk.com', 'HelpDesk');
+                        $mail->Subject = "🚨 Nouveau Ticket URGENT";
+                        $mail->Body = "Un ticket urgent a été soumis par un utilisateur.\n\n"
+                                    . "Titre : $titre\n"
+                                    . "Catégorie : $categorie\n"
+                                    . "Description : $description\n"
+                                    . "Lien : http://votre-domaine/TicketDetails.php?id=$ticketId";
+
+                        foreach ($admins as $admin) {
+                            $mail->addAddress($admin['mail']);
+                        }
+
+                        $mail->send();
                     }
-
-                    $mail->send();
                 } catch (Exception $e) {
                     error_log("Erreur PHPMailer : " . $mail->ErrorInfo);
+                    // Ne bloque pas le script : pas de die() ou exit()
                 }
             }
+
 
             echo "<script>
                     setTimeout(function() {
