@@ -142,47 +142,25 @@ select {
     }
 }
 
-/* Couleurs de fond selon priorité */
-.urgent {
-    background-color: #f44336; /* rouge */
-    color: white;
+/* Couleurs de fond et texte forcées pour les lignes selon priorité */
+tr.urgent td {
+    background-color: #f44336 !important; /* rouge */
+    color: white !important;
 }
 
-.haute {
-    background-color: #ff9800; /* orange */
-    color: white;
+tr.haute td {
+    background-color: #ff9800 !important; /* orange */
+    color: white !important;
 }
 
-.moyenne {
-    background-color: #ffeb3b; /* jaune */
-    color: black;
+tr.moyenne td {
+    background-color: #ffeb3b !important; /* jaune */
+    color: black !important;
 }
 
-.basse {
-    background-color: #4caf50; /* vert */
-    color: white;
-}
-
-/* Optionnel : amélioration au survol */
-.ticket-table tr:hover {
-    filter: brightness(85%);
-}
-
-/* Style de base du tableau, à adapter selon ton style existant */
-.ticket-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.ticket-table th,
-.ticket-table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.ticket-table th {
-    background-color: #f2f2f2;
+tr.basse td {
+    background-color: #4caf50 !important; /* vert */
+    color: white !important;
 }
 
 
