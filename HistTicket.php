@@ -52,22 +52,20 @@ $tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($tickets as $ticket):
-                        echo ($ticket['priorite']);
-                        ?>
+                        <?php foreach ($tickets as $ticket): ?>
                             <?php
                                 $class = '';
                                 switch ($ticket['priorite']) {
-                                    case 'Urgente':
+                                    case 'urgente':
                                         $class = 'urgent';
                                         break;
-                                    case 'Haute':
+                                    case 'haute':
                                         $class = 'haute';
                                         break;
-                                    case 'Moyenne':
+                                    case 'moyenne':
                                         $class = 'moyenne';
                                         break;
-                                    case 'Basse':
+                                    case 'basse':
                                         $class = 'basse';
                                         break;
                                 }
