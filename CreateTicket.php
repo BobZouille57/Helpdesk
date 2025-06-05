@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO tickets (titre, categorie, description, id_user, statut, priorite) VALUES (?, ?, ?, ?, 'En attente', ?)");
             $stmt->execute([$titre, $categorie, $description, $user_id, $priorite]);
             $ticketId = $pdo->lastInsertId();
-            $successMessage = "Ticket créé avec succès ! Vous allez être redirigé...";
 
             // Envoi d'un mail si priorité urgente
             if ($priorite === "Urgente") {
@@ -54,13 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Redirection après 3s
-            echo "<div class='alert alert-success'>" . htmlspecialchars($successMessage) . "</div>";
-            echo "<script>
-                    setTimeout(function() {
-                        window.location.href = 'TicketDetails.php?id=" . $ticketId . "';
-                    }, 3000);
-                  </script>";
+            // Redirection immédiate
+            header("Location: TicketDetails.php?id=" . $ticketId);
+            exit();
         } catch (PDOException $e) {
             $errorMessage = "Erreur lors de la création du ticket : " . $e->getMessage();
         }
